@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Office Manager for JobNimbus · thinkcreate.ai</title>
+<meta name="description" content="Ask about your schedule, leads, pipeline, and invoices in plain English. An AI assistant that works on top of your JobNimbus account, with a preview before anything changes. Built by thinkcreate.ai.">
+<meta property="og:title" content="AI Office Manager for JobNimbus">
+<meta property="og:description" content="Run your roofing company's CRM from a conversation, with previews before anything changes.">
+<meta property="og:image" content="assets/schedule.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M4 17 16 6l12 11' fill='none' stroke='%23c2410c' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M8 15v11h16V15' fill='none' stroke='%23c2410c' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fbfaf8; --bg-2: #f3f1ed; --panel: #ffffff; --text: #1c1917; --muted: #57534e; --faint: #a8a29e;
+  --border: #e7e5e4; --accent: #c2410c; --accent-2: #ea580c; --accent-soft: #fff1e8; --ink-on-accent: #ffffff;
+  --ok: #15803d; --ok-soft: #ecfdf3; --warn-soft: #fef6e0; --shadow: 0 1px 2px rgba(28,25,23,.05), 0 8px 24px rgba(28,25,23,.06);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12100e; --bg-2: #1a1714; --panel: #1f1b18; --text: #f5f3f0; --muted: #b4ada6; --faint: #78716c;
+    --border: #2e2925; --accent: #fb7a3c; --accent-2: #fd9a63; --accent-soft: #2a1a10; --ink-on-accent: #1b0f08;
+    --ok: #4ade80; --ok-soft: #10251a; --warn-soft: #2a2312; --shadow: none;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12100e; --bg-2: #1a1714; --panel: #1f1b18; --text: #f5f3f0; --muted: #b4ada6; --faint: #78716c;
+  --border: #2e2925; --accent: #fb7a3c; --accent-2: #fd9a63; --accent-soft: #2a1a10; --ink-on-accent: #1b0f08;
+  --ok: #4ade80; --ok-soft: #10251a; --warn-soft: #2a2312; --shadow: none;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); }
+img { max-width: 100%; display: block; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+nav.top { position: sticky; top: 0; z-index: 10; backdrop-filter: saturate(1.4) blur(10px); background: color-mix(in srgb, var(--bg) 82%, transparent); border-bottom: 1px solid var(--border); }
+nav.top .wrap { display: flex; align-items: center; gap: 24px; height: 60px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.01em; color: var(--text); text-decoration: none; }
+.brand svg { width: 26px; height: 26px; }
+.brand small { color: var(--muted); font-weight: 500; }
+nav.top .links { display: flex; gap: 22px; margin-left: auto; }
+nav.top .links a { color: var(--muted); text-decoration: none; font-size: 14.5px; font-weight: 500; }
+nav.top .links a:hover { color: var(--text); }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 10px; font-weight: 600; text-decoration: none; font-size: 15.5px; border: 1px solid transparent; transition: transform .12s ease, background .12s; }
+.btn:hover { transform: translateY(-1px); }
+.btn.primary { background: var(--accent); color: var(--ink-on-accent); }
+.btn.primary:hover { background: var(--accent-2); }
+.btn.ghost { border-color: var(--border); color: var(--text); background: var(--panel); }
+.btn.small { padding: 8px 14px; font-size: 14px; }
+
+header.hero { padding: 84px 0 40px; }
+.eyebrow { display: inline-flex; gap: 8px; align-items: center; font-size: 13px; font-weight: 600; color: var(--accent); background: var(--accent-soft); padding: 5px 12px; border-radius: 999px; letter-spacing: .01em; }
+h1 { font-size: clamp(38px, 6vw, 64px); line-height: 1.04; letter-spacing: -.035em; margin: 20px 0 18px; font-weight: 800; max-width: 15ch; }
+h1 em { font-style: normal; color: var(--accent); }
+.lede { font-size: clamp(18px, 2.1vw, 21px); color: var(--muted); max-width: 640px; margin: 0 0 30px; }
+.cta { display: flex; gap: 12px; flex-wrap: wrap; }
+.trust { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 30px; color: var(--muted); font-size: 14px; }
+.trust span { display: inline-flex; align-items: center; gap: 7px; }
+.trust svg { width: 16px; height: 16px; color: var(--ok); flex: none; }
+
+.chat { margin-top: 56px; display: grid; gap: 16px; }
+.chat .bubble { justify-self: start; max-width: 560px; }
+.bubble { background: var(--panel); border: 1px solid var(--border); border-radius: 18px 18px 18px 4px; padding: 18px 20px; box-shadow: var(--shadow); font-size: 17px; font-weight: 500; }
+.bubble .who { font-size: 12.5px; color: var(--faint); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+.shot { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
+.shot .bar { display: flex; gap: 6px; padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--bg-2); }
+.shot .bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--border); }
+.shot figcaption { font-size: 13px; color: var(--muted); padding: 10px 14px; border-top: 1px solid var(--border); }
+
+section { padding: 84px 0; }
+section.alt { background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+h2 { font-size: clamp(28px, 3.6vw, 40px); letter-spacing: -.025em; line-height: 1.12; margin: 0 0 14px; font-weight: 800; }
+.sub { color: var(--muted); font-size: 18px; max-width: 680px; margin: 0 0 44px; }
+
+.ask { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; margin-bottom: 72px; }
+.ask .copy { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px 40px; align-items: start; }
+.ask .copy .quote { grid-column: 1 / -1; font-size: 18px; }
+.ask .copy h3 { grid-column: 1; }
+.ask .copy p, .ask .copy ul { grid-column: 2; margin-top: 0; }
+.ask .copy h3 + p { grid-row: 2; }
+.ask h3 { font-size: 23px; letter-spacing: -.015em; margin: 0 0 10px; line-height: 1.25; }
+.ask .quote { font-size: 15px; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+.ask p { color: var(--muted); margin: 0 0 10px; }
+.ask ul { color: var(--muted); padding-left: 18px; margin: 8px 0 0; }
+.ask li { margin-bottom: 4px; }
+
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 22px; box-shadow: var(--shadow); }
+.card h4 { margin: 12px 0 6px; font-size: 17px; letter-spacing: -.01em; }
+.card p { margin: 0; color: var(--muted); font-size: 15px; }
+.icon { width: 38px; height: 38px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; }
+.icon svg { width: 20px; height: 20px; }
+
+.cover { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.cover .card h4 { display: flex; align-items: center; gap: 8px; margin-top: 0; }
+.cover ul { margin: 10px 0 0; padding: 0; list-style: none; }
+.cover li { padding: 7px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 15px; display: flex; gap: 10px; }
+.cover li:first-child { border-top: none; }
+.cover li b { color: var(--text); font-weight: 600; min-width: 140px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: none; }
+.dot.ok { background: var(--ok); } .dot.no { background: var(--faint); }
+
+.flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; align-items: stretch; margin-top: 10px; }
+.flow .node { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 20px; position: relative; }
+.flow .node:not(:last-child)::after { content: "→"; position: absolute; right: -22px; top: 50%; transform: translateY(-50%); color: var(--faint); font-size: 22px; }
+.flow { gap: 30px; }
+.flow .node small { color: var(--accent); font-weight: 700; font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; }
+.flow .node h4 { margin: 6px 0; font-size: 18px; }
+.flow .node p { margin: 0; color: var(--muted); font-size: 15px; }
+
+.steps { counter-reset: step; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.steps .card { position: relative; padding-top: 52px; }
+.steps .card::before { counter-increment: step; content: counter(step); position: absolute; top: 18px; left: 22px; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--ink-on-accent); display: grid; place-items: center; font-weight: 700; font-size: 14px; }
+.steps .card .when { font-size: 13px; color: var(--accent); font-weight: 600; }
+
+details.faq { border-top: 1px solid var(--border); padding: 18px 0; }
+details.faq:last-child { border-bottom: 1px solid var(--border); }
+details.faq summary { cursor: pointer; font-weight: 600; font-size: 17px; list-style: none; display: flex; justify-content: space-between; gap: 20px; }
+details.faq summary::after { content: "+"; color: var(--faint); font-size: 22px; line-height: 1; }
+details.faq[open] summary::after { content: "–"; }
+details.faq p { color: var(--muted); margin: 10px 0 0; max-width: 780px; }
+
+.final { text-align: center; }
+.final .sub { margin: 0 auto 28px; }
+footer { padding: 34px 0 50px; color: var(--faint); font-size: 13.5px; border-top: 1px solid var(--border); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 14px 30px; justify-content: space-between; }
+footer p { margin: 0; max-width: 720px; }
+.theme { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; padding: 6px 9px; cursor: pointer; font: inherit; font-size: 13px; }
+
+@media (max-width: 900px) {
+  nav.top .links { display: none; }
+  .chat, .ask, .cover, .grid3, .flow, .steps { grid-template-columns: 1fr; }
+  .ask .copy { grid-template-columns: 1fr; }
+  .ask .copy p, .ask .copy ul, .ask .copy h3 { grid-column: 1; }
+  .ask .copy h3 + p { grid-row: auto; }
+  .flow .node:not(:last-child)::after { content: "↓"; right: 50%; top: auto; bottom: -27px; transform: translateX(50%); }
+  header.hero { padding-top: 52px; }
+  section { padding: 60px 0; }
+}
+@media (max-width: 520px) { .wrap { padding: 0 16px; } .cover li b { min-width: 110px; } }
+</style>
+</head>
+<body>
+<nav class="top">
+  <div class="wrap">
+    <a class="brand" href="#">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 17 16 6l12 11" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent)"/><path d="M8 15v11h16V15" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round" style="color:var(--accent)"/></svg>
+      AI Office Manager <small>for JobNimbus</small>
+    </a>
+    <div class="links">
+      <a href="#examples">What it does</a>
+      <a href="#safety">Safety</a>
+      <a href="#coverage">Coverage</a>
+      <a href="#pilot">Pilot</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a class="btn primary small" href="https://thinkcreate.ai">Book a demo</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">For roofing &amp; exterior contractors on JobNimbus</span>
+    <h1>Run your CRM from <em>a conversation.</em></h1>
+    <p class="lede">Ask about tomorrow's crew schedule, log a storm lead, chase stale estimates, or total up overdue invoices, all in plain English. The assistant works on top of your JobNimbus account and shows you exactly what it will change before it changes anything.</p>
+    <div class="cta">
+      <a class="btn primary" href="https://thinkcreate.ai">Book a 20-minute demo</a>
+      <a class="btn ghost" href="#examples">See it in action ↓</a>
+    </div>
+    <div class="trust">
+      <span><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-8 8a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.4L8 12.6l7.3-7.3a1 1 0 0 1 1.4 0Z" clip-rule="evenodd"/></svg>Keep using JobNimbus as is</span>
+      <span><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-8 8a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.4L8 12.6l7.3-7.3a1 1 0 0 1 1.4 0Z" clip-rule="evenodd"/></svg>Preview before every bulk change</span>
+      <span><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-8 8a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.4L8 12.6l7.3-7.3a1 1 0 0 1 1.4 0Z" clip-rule="evenodd"/></svg>Starts read-only</span>
+      <span><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-8 8a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.4L8 12.6l7.3-7.3a1 1 0 0 1 1.4 0Z" clip-rule="evenodd"/></svg>Powered by Claude</span>
+    </div>
+
+    <div class="chat">
+      <div class="bubble"><div class="who">You</div>“What's on the schedule for the Johnson crew tomorrow?”</div>
+      <figure class="shot" style="margin:0">
+        <div class="bar"><i></i><i></i><i></i></div>
+        <img src="assets/schedule.jpg" alt="Schedule for the Johnson Crew: 7:00 AM tear-off and dry-in at 45 Elm St, 7:00 AM roofing work order, 9:30 AM shingle delivery" width="1232" height="425">
+        <figcaption>It finds the crew, pulls their tasks and work orders, and adds the job addresses. Sample data shown.</figcaption>
+      </figure>
+    </div>
+  </div>
+</header>
+
+<section id="examples" class="alt">
+  <div class="wrap">
+    <h2>Ask it the way you'd ask your office manager.</h2>
+    <p class="sub">No new software for the crew to learn. The same records, workflows, and statuses you already use in JobNimbus, without the clicking.</p>
+
+    <div class="ask">
+      <div class="copy">
+        <div class="quote">“Move every job in Estimate Sent with no activity in 14 days to Follow Up, and leave a note.”</div>
+        <h3>Bulk changes, with a preview first</h3>
+        <p>It finds the stale jobs, lists exactly what will change, and waits for your OK. If the list changes before you approve it, it stops and asks again.</p>
+        <ul><li>Jobs with recent calls or notes are left alone</li><li>Statuses are checked against your real workflows</li></ul>
+      </div>
+      <figure class="shot" style="margin:0"><div class="bar"><i></i><i></i><i></i></div><img src="assets/preview.jpg" alt="Preview: two jobs will move from Estimate Sent to Follow Up; nothing saved until approved" width="1232" height="515" loading="lazy"></figure>
+    </div>
+
+    <div class="ask">
+      <div class="copy">
+        <div class="quote">“Summarize open invoices over 30 days old.”</div>
+        <h3>Know where the money is</h3>
+        <p>Open balances by age, by customer and job, in seconds. Ask follow-ups like “which of these are insurance jobs?” or “draft a reminder for the oldest one.”</p>
+      </div>
+      <figure class="shot" style="margin:0"><div class="bar"><i></i><i></i><i></i></div><img src="assets/aging.jpg" alt="Invoice aging: $18,500 open across 3 invoices; $10,000 in 31–60 days, $8,500 over 90 days" width="1232" height="400" loading="lazy"></figure>
+    </div>
+
+    <div class="ask">
+      <div class="copy">
+        <div class="quote">“Add a note to the Smith job: customer called about timing.”</div>
+        <h3>It asks instead of guessing</h3>
+        <p>Two Smith jobs? It asks which one, by address and job number, rather than picking one. The same goes for team members, crews, and statuses.</p>
+      </div>
+      <figure class="shot" style="margin:0"><div class="bar"><i></i><i></i><i></i></div><img src="assets/ambiguity.jpg" alt="'Smith' matches 2 jobs: Roof Replacement at 45 Elm St and Gutter Repair at 900 Pine Ave — which one?" width="1232" height="360" loading="lazy"></figure>
+    </div>
+
+    <div class="grid3">
+      <div class="card"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div><h4>“New lead: Mike Davis, 123 Oak St, hail damage. Inspection Thursday 10am with Sarah.”</h4><p>Creates the contact, checks for duplicates, opens the job, assigns the rep, and books the inspection on the calendar.</p></div>
+      <div class="card"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h10M4 17h7"/></svg></div><h4>“Write an estimate for the Brown job: 25 squares of architectural shingles plus drip edge.”</h4><p>Prices come from your product catalog. You see the totals before anything is saved.</p></div>
+      <div class="card"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16l4-4 3 3 5-6 4 4"/></svg></div><h4>“Give me a status update for John Smith I can text him.”</h4><p>Pulls status, schedule, invoices, payments, and recent notes into a plain-language customer update.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="safety">
+  <div class="wrap">
+    <h2>Built so it can't make a mess.</h2>
+    <p class="sub">An assistant that can edit your CRM has to be more careful than a person, not less. These guardrails are built into the software itself, not left to the AI's judgment.</p>
+    <div class="grid3">
+      <div class="card"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></div><h4>Preview before it saves</h4><p>Every change can be previewed field by field. Bulk and financial changes always start as a preview and need your approval.</p></div>
+      <div class="card"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/><path d="M4 4l16 16"/></svg></div><h4>No deletes by default</h4><p>Deleting is switched off unless you turn it on. Bulk changes are capped per request.</p></div>
+      <div class="card"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4Z"/></svg></div><h4>Your permissions, not more</h4><p>Connects with a JobNimbus API key tied to an access profile you choose. Read-only pilots are the default.</p></div>
+      <div class="card"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg></div><h4>Times you can trust</h4><p>“Thursday 10am” is read in your time zone, and the exact date is repeated back to you before anything is booked.</p></div>
+      <div class="card"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div><h4>Real workflows only</h4><p>Statuses, task types, and team members are checked against your JobNimbus settings. Invalid choices come back with the valid options.</p></div>
+      <div class="card"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><h4>Keys stay private</h4><p>API keys and customer details are never written to logs, and uploads never expose your credentials.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="coverage" class="alt">
+  <div class="wrap">
+    <h2>What it covers, and what it doesn't.</h2>
+    <p class="sub">It uses JobNimbus's documented public API, so it can do what that API allows. Here's the plain-English version.</p>
+    <div class="cover">
+      <div class="card">
+        <h4><span class="dot ok"></span>Works today</h4>
+        <ul>
+          <li><b>Contacts &amp; jobs</b>Search, create, update, change status, find stale jobs</li>
+          <li><b>Scheduling</b>Crew/day/week schedule, tasks, appointments, work orders</li>
+          <li><b>Notes &amp; photos</b>Read the activity feed, add notes, upload photos/documents</li>
+          <li><b>Money</b>Estimates, invoices, aging, payments received, budgets</li>
+          <li><b>Operations</b>Work orders, material orders, product catalog</li>
+          <li><b>Your setup</b>Workflows, statuses, team, groups, custom fields</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4><span class="dot no"></span>Not possible through JobNimbus's API</h4>
+        <ul>
+          <li><b>Messaging</b>Sending texts or emails from JobNimbus</li>
+          <li><b>Automations</b>Viewing or editing automation rules</li>
+          <li><b>Documents</b>Generating proposals/PDFs or e-signatures</li>
+          <li><b>Payments</b>Charging cards or recording payments</li>
+          <li><b>Boards &amp; reports</b>JobNimbus's built-in boards and reports</li>
+          <li><b>Hard deletes</b>Records can only be deactivated</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:60px">
+      <h2 style="font-size:28px">How it works</h2>
+      <div class="flow">
+        <div class="node"><small>You</small><h4>Ask in Claude</h4><p>On desktop or the web, in plain English. Your team uses an app they may already have.</p></div>
+        <div class="node"><small>The connector</small><h4>Our JobNimbus connector</h4><p>Turns requests into safe, validated JobNimbus actions: previews, permission checks, and "did you mean?" questions.</p></div>
+        <div class="node"><small>Your CRM</small><h4>Your JobNimbus account</h4><p>The same records your office and crews already use. Nothing to migrate.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pilot">
+  <div class="wrap">
+    <h2>Low-risk way to try it.</h2>
+    <p class="sub">We start on sample data, then on your account read-only, and only turn on changes once your team trusts it.</p>
+    <div class="steps">
+      <div class="card"><div class="when">Week 0</div><h4>Live demo on a sample company</h4><p>We run your real day-to-day questions against a realistic sample roofing company, no account access needed.</p></div>
+      <div class="card"><div class="when">Weeks 1–2</div><h4>Read-only pilot on your account</h4><p>Schedules, pipeline summaries, stale leads, and invoice aging on your real data, with no ability to change anything.</p></div>
+      <div class="card"><div class="when">Week 3+</div><h4>Turn on the time-savers</h4><p>Lead intake, scheduling, notes, and bulk follow-ups with previews. We train your office team and tune it to your workflows.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" class="alt">
+  <div class="wrap">
+    <h2>Questions</h2>
+    <details class="faq"><summary>Do we have to change how we use JobNimbus?</summary><p>No. Your office and crews keep using JobNimbus exactly as they do now. The assistant reads and updates the same records through JobNimbus's official API.</p></details>
+    <details class="faq"><summary>Is this made by JobNimbus?</summary><p>No. It's an independent integration built by thinkcreate.ai on JobNimbus's public API. JobNimbus is a trademark of its owner, and this product isn't affiliated with or endorsed by JobNimbus.</p></details>
+    <details class="faq"><summary>Which AI does it use?</summary><p>Claude, made by Anthropic. Your team chats with Claude, and Claude uses our connector to act on JobNimbus. The connector uses the Model Context Protocol, an open standard for connecting AI assistants to business tools.</p></details>
+    <details class="faq"><summary>What happens to our customer data?</summary><p>The connector runs on your machine or on infrastructure we set up for you, and it never stores your CRM data. When you ask a question, the relevant records are sent to Claude to answer it, under Anthropic's terms for the plan you use. We'll walk through the details, and the right Claude plan for your business, during the pilot.</p></details>
+    <details class="faq"><summary>Can it break something?</summary><p>Bulk and financial changes always start as a preview that needs your approval. Deleting is switched off. The pilot starts read-only. Its access is limited to the JobNimbus access profile you assign to its API key.</p></details>
+    <details class="faq"><summary>Can it text customers or send invoices?</summary><p>Not through JobNimbus. Its API doesn't support sending messages or emails. It can draft the text for you to send, and we can connect other tools (for example your phone or email system) as a separate project.</p></details>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <h2>See it on your own questions.</h2>
+    <p class="sub">Bring the three things your office asks about most. We'll show the assistant handling them in 20 minutes.</p>
+    <a class="btn primary" href="https://thinkcreate.ai">Book a demo with thinkcreate.ai</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>© <span id="y"></span> thinkcreate.ai. JobNimbus is a trademark of its respective owner. This independent integration is not affiliated with, sponsored, or endorsed by JobNimbus. Claude is a product of Anthropic. Screenshots show fictional sample data.</p>
+    <button class="theme" id="theme" type="button">Toggle theme</button>
+  </div>
+</footer>
+<script>
+document.getElementById("y").textContent = new Date().getFullYear();
+(function () {
+  const root = document.documentElement;
+  try { const t = localStorage.getItem("theme"); if (t) root.dataset.theme = t; } catch (e) {}
+  document.getElementById("theme").addEventListener("click", function () {
+    const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+    root.dataset.theme = dark ? "light" : "dark";
+    try { localStorage.setItem("theme", root.dataset.theme); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>
